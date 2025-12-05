@@ -20,7 +20,7 @@ from matplotlib.ticker import MaxNLocator
 SEED = 42
 BATCH_SIZE = 64           # batch size for training on clients
 EVAL_BATCH_SIZE = 64      # batch size for evaluation
-LOCAL_EPOCHS = 10         # local epochs per communication round
+LOCAL_EPOCHS = 3         # local epochs per communication round
 COMM_ROUNDS = 10          # communication rounds
 NUM_CLASSES = 9           # PathMNIST has 9 classes
 LR = 0.001
@@ -488,7 +488,6 @@ if __name__ == "__main__":
     plt.plot(rounds, fedavg_local_accs_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedavg_local_accs_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedavg_local_accs_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedAvg Local Accuracy per Hospital")
     plt.xlabel("Communication Round")
     plt.ylabel("Local Test Accuracy (%)")
@@ -505,7 +504,6 @@ if __name__ == "__main__":
     plt.plot(rounds, fedper_local_accs_arr[:, 0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedper_local_accs_arr[:, 1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedper_local_accs_arr[:, 2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedPer Local Accuracy per Hospital")
     plt.xlabel("Communication Round")
     plt.ylabel("Local Test Accuracy (%)")
@@ -515,6 +513,29 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
+    # -----------------------------------------
+    # Plot 3 — FedAvg vs FedPer Global Accuracy
+    # -----------------------------------------
+    fedavg_global_arr = np.array(fedavg_global_accs)
+    fedper_soft_arr   = np.array(soft_accs_all)
+    rounds = np.arange(1, len(fedavg_global_arr) + 1)
+    
+    plt.figure(figsize=(8, 5))
+    plt.plot(rounds, fedavg_global_arr, marker='o', label='FedAvg (Global)', alpha=0.9)
+    plt.plot(rounds, fedper_soft_arr, marker='o', label='FedPer Soft Vote (Global)', alpha=0.9)
+    plt.xlabel("Communication Round")
+    plt.ylabel("Global Test Accuracy (%)")
+    plt.title("FedAvg vs FedPer — Global Accuracy per Communication Round")
+    plt.xticks(rounds)
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # -------------------------------
+    # Plot 4 — FedAvg Local precision
+    # -------------------------------
     fedavg_local_precisions_arr = np.array(fedavg_local_precisions)
     fedper_local_precisions_arr = np.array(fedper_local_precisions)
 
@@ -522,7 +543,6 @@ if __name__ == "__main__":
     plt.plot(rounds, fedavg_local_precisions_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedavg_local_precisions_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedavg_local_precisions_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedAvg Local Precision per Hospital (%)")
     plt.xlabel("Communication Round")
     plt.ylabel("Precision (%)")
@@ -532,11 +552,13 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
+    # -------------------------------
+    # Plot 5 — FedPer Local precision
+    # -------------------------------
     plt.figure(figsize=(8, 5))
     plt.plot(rounds, fedper_local_precisions_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedper_local_precisions_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedper_local_precisions_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedPer Local Precision per Hospital (%)")
     plt.xlabel("Communication Round")
     plt.ylabel("Precision (%)")
@@ -546,6 +568,9 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
+    # -----------------------------
+    # Plot 6 — FedAvg Local Recall
+    # -----------------------------
     fedavg_local_recalls_arr = np.array(fedavg_local_recalls)
     fedper_local_recalls_arr = np.array(fedper_local_recalls)
 
@@ -553,7 +578,6 @@ if __name__ == "__main__":
     plt.plot(rounds, fedavg_local_recalls_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedavg_local_recalls_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedavg_local_recalls_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedAvg Local Recall per Hospital (%)")
     plt.xlabel("Communication Round")
     plt.ylabel("Recall (%)")
@@ -563,11 +587,13 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
+    # -----------------------------
+    # Plot 7 — FedPer Local Recall
+    # -----------------------------
     plt.figure(figsize=(8, 5))
     plt.plot(rounds, fedper_local_recalls_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedper_local_recalls_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedper_local_recalls_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedPer Local Recall per Hospital (%)")
     plt.xlabel("Communication Round")
     plt.ylabel("Recall (%)")
@@ -577,6 +603,9 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
+    # ------------------------------
+    # Plot 8 — FedAvg Local F1 Score
+    # ------------------------------
     fedavg_local_f1s_arr = np.array(fedavg_local_f1s)
     fedper_local_f1s_arr = np.array(fedper_local_f1s)
 
@@ -584,7 +613,6 @@ if __name__ == "__main__":
     plt.plot(rounds, fedavg_local_f1s_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedavg_local_f1s_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedavg_local_f1s_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedAvg F1 Score per Hospital (%)")
     plt.xlabel("Communication Round")
     plt.ylabel("F1 Score (%)")
@@ -594,11 +622,13 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
 
+    # ------------------------------
+    # Plot 9 — FedPer Local F1 Score
+    # ------------------------------
     plt.figure(figsize=(8, 5))
     plt.plot(rounds, fedper_local_f1s_arr[:,0], marker='o', color='green', label='Hospital A')
     plt.plot(rounds, fedper_local_f1s_arr[:,1], marker='o', color='blue', label='Hospital B')
     plt.plot(rounds, fedper_local_f1s_arr[:,2], marker='o', color='red', label='Hospital C')
-
     plt.title("FedPer F1 Score per Hospital (%)")
     plt.xlabel("Communication Round")
     plt.ylabel("F1 Score (%)")
